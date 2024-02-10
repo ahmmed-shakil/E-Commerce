@@ -14,7 +14,7 @@ const DesktopFooter = () => {
             <div className=" grid grid-cols-1 lg:grid-cols-3 justify-between items-start">
               <div className=" flex flex-col space-y-5">
                 <h2 className="text-2xl font-semibold">
-                  <span className="text-primary">CODE</span>MASTER
+                  <span className="text-primary">S</span>MART
                 </h2>
                 <div className=" flex items-center gap-2">
                   <MapPinIcon className=" h-5 w-5" />

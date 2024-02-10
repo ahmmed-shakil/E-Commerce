@@ -11,7 +11,7 @@ const DesktopHeader = () => {
   const { pathname } = useLocation();
   return (
     <div
-      className="sticky bg-primary dark:bg-slate-950 text-slate-100 top-0 shadow"
+      className="sticky gradient-background dark:bg-slate-950 text-slate-100 top-0 shadow"
       style={{ zIndex: 999999999999999 }}
     >
       <Layout>
@@ -32,9 +32,7 @@ const DesktopHeader = () => {
         <div className=" grid grid-cols-header pb-5">
           <div className="flex items-center justify-evenly">
             <NavLink to={"/"}>
-              <h2 className="text-2xl font-semibold">
-                <span>CODE</span>MASTER
-              </h2>
+              <h2 className="text-2xl font-semibold">S-MART</h2>
             </NavLink>
             <div className=" ms-10">
               <CategoriesDropDown />
