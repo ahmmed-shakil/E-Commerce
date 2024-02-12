@@ -9,6 +9,7 @@
   --primary-dark: #b24005; /* Darker shade */
   --primary-light: #ff6e38; /* Lighter shade */
   --secondary: #141414;
+  --final:#26ABD4;
   --third: #FEF6F7;
   --last: #FFFDF7;
   /* --primary: #00CF5D; */
@@ -59,6 +60,19 @@ p{
 
 .bgd-primary{
   @apply bg-slate-100 dark:bg-slate-800
+}
+
+.btn-primary{
+  @apply bg-primary border text-sm border-transparent text-slate-100 py-2 px-4 rounded-md  hover:bg-transparent hover:border-primary hover:text-slate-800 hover:dark:text-slate-100
+}
+.btn-primary-outline{
+  @apply hover:bg-primary border text-sm hover:border-transparent hover:text-slate-100 py-2 px-4 rounded-md  bg-transparent border-primary 
+}
+.btn-secondary{
+  @apply bg-final border text-sm border-transparent text-slate-100 py-2 px-4 rounded-md  hover:bg-transparent hover:border-final hover:text-slate-800 hover:dark:text-slate-100
+}
+.btn-secondary-outline{
+  @apply hover:bg-final border text-sm hover:border-transparent hover:text-slate-100 py-2 px-4 rounded-md  bg-transparent border-final 
 }
 
 

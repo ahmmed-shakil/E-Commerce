@@ -6,6 +6,7 @@ import AllCourses from "../components/AllCourses/AllCourses";
 import Login from "../components/Auth/Login/Login";
 import CourseDetails from "../components/Courses/CourseDetails";
 import Admin from "../Admin";
+import ProductDetails from "../components/Products/ProductDetails/ProductDetails";
 
 export const pages = [
   {
@@ -15,6 +16,14 @@ export const pages = [
     key: "home",
     value: "Home",
     show: true,
+  },
+  {
+    path: "/product-details/:id",
+    exact: true,
+    component: ProductDetails,
+    key: "product-details",
+    value: "product Details",
+    show: false,
   },
   {
     path: "/task-manager",

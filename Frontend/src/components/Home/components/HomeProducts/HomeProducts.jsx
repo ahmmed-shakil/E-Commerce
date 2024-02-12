@@ -12,9 +12,7 @@ export const HomeProducts = () => {
         <div className=" bg-slate-50 dark:bg-slate-900 shadow p-3 rounded-md mt-5">
           <ProductContainer />
           <div className=" my-3 flex justify-center">
-            <button className=" gradient-background text-slate-100 py-2 px-3 rounded-md">
-              LOAD MORE
-            </button>
+            <button className=" btn-primary">LOAD MORE</button>
           </div>
         </div>
       </Layout>

@@ -11,7 +11,7 @@ const DesktopHeader = () => {
   const { pathname } = useLocation();
   return (
     <div
-      className="sticky gradient-background dark:bg-slate-950 text-slate-100 top-0 shadow"
+      className="hidden md:block sticky gradient-background dark:bg-slate-950 text-slate-100 top-0 shadow"
       style={{ zIndex: 999999999999999 }}
     >
       <Layout>

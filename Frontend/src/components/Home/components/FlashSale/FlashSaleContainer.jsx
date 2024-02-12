@@ -12,9 +12,7 @@ export const FlashSaleContainer = () => {
         <div className=" bg-slate-50 dark:bg-slate-900 shadow p-3 rounded-md mt-5">
           <div className=" flex justify-between items-center">
             <h6 className=" text-primary font-semibold">On Sale Now</h6>
-            <button className=" gradient-background text-slate-100 py-2 px-3 rounded-md">
-              SHOP MORE
-            </button>
+            <button className=" btn-primary-outline">SHOP MORE</button>
           </div>
           <ProductContainer />
         </div>
