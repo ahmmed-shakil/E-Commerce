@@ -27,6 +27,7 @@ const CategoriesDropDown = () => {
 
   const handleItemMouseLeave = () => {
     setItemIsOpen(false);
+    setIsCatOpen(false);
   };
   const handleItemMouseOnCat = () => {
     setIsCatOpen(true);

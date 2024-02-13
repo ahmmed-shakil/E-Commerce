@@ -44,7 +44,7 @@ export const BuyingDetails = () => {
           <p>-66%</p>
         </div>
       </div>
-      <div className=" flex items-center gap-3 my-3">
+      {/* <div className=" flex items-center gap-3 my-3">
         <p>Color: </p>
         <img
           src={product}
@@ -70,7 +70,7 @@ export const BuyingDetails = () => {
           src={product}
           className=" h-10 w-10 border border-slate-950 rounded-md"
         />
-      </div>
+      </div> */}
       <div className=" flex items-center gap-3 my-3">
         <p>Size: </p>
         <p className=" text-sm font-light px-4 py-2 rounded-md border border-primary">
