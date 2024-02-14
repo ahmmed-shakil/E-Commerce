@@ -74,7 +74,7 @@ const DesktopHeader = () => {
               <p className=" text-md">Signup</p>
             </NavLink>
             <NavLink
-              to={"/login"}
+              to={"/cart"}
               className={`py-2 px-3 h-10 flex gap-2 items-center relative ${
                 pathname === "/login" && "bg-primary text-white"
               }`}

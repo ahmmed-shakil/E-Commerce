@@ -7,6 +7,8 @@ import Login from "../components/Auth/Login/Login";
 import CourseDetails from "../components/Courses/CourseDetails";
 import Admin from "../Admin";
 import ProductDetails from "../components/Products/ProductDetails/ProductDetails";
+import Cart from "../components/Cart/Cart";
+import Checkout from "../components/Checkout/Checkout";
 
 export const pages = [
   {
@@ -55,6 +57,22 @@ export const pages = [
     component: Login,
     key: "login",
     value: "Login",
+    show: false,
+  },
+  {
+    path: "/cart",
+    exact: true,
+    component: Cart,
+    key: "cart",
+    value: "Cart",
+    show: false,
+  },
+  {
+    path: "/checkout",
+    exact: true,
+    component: Checkout,
+    key: "checkout",
+    value: "Checkout",
     show: false,
   },
   // {
