@@ -5,6 +5,7 @@ import {
 } from "@heroicons/react/24/solid";
 import React, { useState } from "react";
 import demo from "../../images/Navbar/kurti.jpg";
+import { NavLink } from "react-router-dom";
 
 const CategoriesDropDown = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -87,7 +88,9 @@ const CategoriesDropDown = () => {
                 className=" cursor-pointer hover:bg-slate-200 hover:bg-opacity-40 px-2 rounded-md hover:text-primary"
               >
                 <div className=" flex justify-between items-center">
-                  <p>Traditional Wear</p>
+                  <NavLink to={`/category/traditional-item`}>
+                    <p>Traditional Wear</p>
+                  </NavLink>
                   {isCatOpen ? (
                     <ChevronRightIcon
                       width={20}
@@ -111,16 +114,18 @@ const CategoriesDropDown = () => {
                 </div>
               </div>
               <div className=" p-1 grid grid-cols-4 gap-3 items-center">
-                <div className=" flex flex-col items-center cursor-pointer">
-                  <div className=" h-10 rounded-full">
-                    <img
-                      src={demo}
-                      alt="Salwaar"
-                      className=" rounded-full h-10 w-full"
-                    />
+                <NavLink to={`/salwar-kameez`}>
+                  <div className=" flex flex-col items-center cursor-pointer hover:text-primary">
+                    <div className=" h-10 rounded-full">
+                      <img
+                        src={demo}
+                        alt="Salwaar"
+                        className=" rounded-full h-10 w-full"
+                      />
+                    </div>
+                    <p className=" text-sm text-center ">Salwaar Kameez</p>
                   </div>
-                  <p className=" text-sm text-center">Salwaar Kameez</p>
-                </div>
+                </NavLink>
                 <div className=" flex flex-col items-center cursor-pointer">
                   <div className=" h-10 rounded-full">
                     <img

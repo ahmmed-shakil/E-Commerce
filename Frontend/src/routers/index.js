@@ -9,6 +9,8 @@ import Admin from "../Admin";
 import ProductDetails from "../components/Products/ProductDetails/ProductDetails";
 import Cart from "../components/Cart/Cart";
 import Checkout from "../components/Checkout/Checkout";
+import CategoryPage from "../components/CategoryPage/CategoryPage";
+import CategoryItemPage from "../components/CategoryPage/CategoryItemPage";
 
 export const pages = [
   {
@@ -73,6 +75,22 @@ export const pages = [
     component: Checkout,
     key: "checkout",
     value: "Checkout",
+    show: false,
+  },
+  {
+    path: "/category/:cat",
+    exact: true,
+    component: CategoryPage,
+    key: "category",
+    value: "Category",
+    show: false,
+  },
+  {
+    path: "/:item",
+    exact: true,
+    component: CategoryItemPage,
+    key: "item",
+    value: "Item",
     show: false,
   },
   // {

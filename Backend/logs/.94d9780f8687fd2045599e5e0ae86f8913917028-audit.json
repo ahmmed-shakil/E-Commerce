@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "E:\\POG\\Code\\Backend\\logs\\.94d9780f8687fd2045599e5e0ae86f8913917028-audit.json",
+    "files": [
+        {
+            "date": 1708773788488,
+            "name": "E:\\POG\\Code\\Backend\\logs\\2024-02-24.log",
+            "hash": "824826e7120c40670867e025b42c5c79cf7046228b0e4c07972d85a24c4f0c1e"
+        }
+    ],
+    "hashType": "sha256"
+}

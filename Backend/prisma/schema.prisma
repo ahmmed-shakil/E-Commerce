@@ -1,0 +1,381 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+//------------admin roles -----------	
+
+model admin_roles {
+  id             String        @id @default(uuid())
+  roleName       String        @unique
+  adminWithRoles admin_users[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt()
+  enabled        Boolean       @default(true)
+}
+
+//-----------admin schema-------------
+
+model admin_users {
+  id            String       @id @default(uuid())
+  firstName     String
+  lastName      String?
+  email         String       @unique
+  phoneNumber   String       @unique
+  addressLine1  String?
+  addressLine2  String?
+  city          String?
+  state         String?
+  country       String?
+  zipCode       Int?
+  countryCode   String?
+  gender        String?
+  dateOfBirth   DateTime?
+  userName      String       @unique
+  password      String
+  userImageLink String?
+  admin_roles   admin_roles? @relation(fields: [admin_rolesId], references: [id])
+  admin_rolesId String
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt()
+  enabled       Boolean      @default(true)
+  userType      String       @default("admin")
+}
+
+//------------Vendor roles -----------	
+
+model vendor_roles {
+  id             String         @id @default(uuid())
+  roleName       String         @unique
+  adminWithRoles vendor_users[]
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt()
+  enabled        Boolean        @default(true)
+}
+
+//-------Vendor User-------------
+model vendor_users {
+  id             String        @id @default(uuid())
+  firstName      String
+  lastName       String?
+  email          String        @unique
+  phoneNumber    String        @unique
+  addressLine1   String?
+  addressLine2   String?
+  city           String?
+  state          String?
+  country        String?
+  zipCode        Int?
+  countryCode    String?
+  gender         String?
+  dateOfBirth    DateTime?
+  userName       String        @unique
+  password       String
+  vendor_roles   vendor_roles? @relation(fields: [vendor_rolesId], references: [id])
+  vendor_rolesId String
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt()
+  enabled        Boolean       @default(true)
+  userType       String        @default("vendor")
+
+  discount          discount[]
+  shipping_discount shipping_discount[]
+  discount_coupons  discount_coupons[]
+  discount_vouchers discount_vouchers[]
+  store_inventory   store_inventory[]
+}
+
+//-------Store SKU Catrgory----------
+model store_SKU_category {
+  id                     String                   @id @default(uuid())
+  SKUCategoryName        String
+  approvalStatus         Boolean
+  createdAt              DateTime                 @default(now())
+  updatedAt              DateTime                 @updatedAt()
+  enabled                Boolean                  @default(true)
+  store_SKU_sub_category store_SKU_sub_category[]
+  discount               discount[]
+  shipping_discount      shipping_discount[]
+  discount_coupons       discount_coupons[]
+  discount_vouchers      discount_vouchers[]
+}
+
+model store_SKU_sub_category {
+  id                 String              @id @default(uuid())
+  SKUSubCategoryName String
+  approvalStatus     Boolean
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt()
+  enabled            Boolean             @default(true)
+  store_SKU_category store_SKU_category  @relation(fields: [SKUCategoryID], references: [id])
+  SKUCategoryID      String
+  discount           discount[]
+  shipping_discount  shipping_discount[]
+  discount_coupons   discount_coupons[]
+  discount_vouchers  discount_vouchers[]
+}
+
+model brand {
+  id                String              @id @default(uuid())
+  brandName         String
+  approvalStatus    Boolean
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt()
+  enabled           Boolean             @default(true)
+  discount          discount[]
+  shipping_discount shipping_discount[]
+  discount_coupons  discount_coupons[]
+  discount_vouchers discount_vouchers[]
+}
+
+//--------Store SKU Items-----
+model store_SKU_items {
+  id                      String                    @id @default(uuid())
+  SKUItemName             String
+  SKUItemMeasurementUnit  String
+  approvalStatus          Boolean
+  createdAt               DateTime                  @default(now())
+  updatedAt               DateTime                  @updatedAt()
+  enabled                 Boolean                   @default(true)
+  store_SKU_item_variants store_SKU_item_variants[]
+  discount                discount[]
+  shipping_discount       shipping_discount[]
+  discount_coupons        discount_coupons[]
+  discount_vouchers       discount_vouchers[]
+}
+
+//--------Store SKU Item Variants------
+
+model store_SKU_item_variants {
+  id                          String              @id @default(uuid())
+  isNCItem                    Boolean             @default(false)
+  store_SKU_items             store_SKU_items?    @relation(fields: [SKUItemID], references: [id])
+  SKUItemID                   String
+  SKUItemVariantName          String
+  SKUItemVariantQuantity      Int
+  approvalStatus              Boolean
+  createdAt                   DateTime            @default(now())
+  updatedAt                   DateTime            @updatedAt()
+  enabled                     Boolean             @default(true)
+  SKUItemVariantsBaseRate     Int
+  SKUItemVariantsDiscountRate Int?
+  SKUItemVairantColor         String?
+  discount                    discount[]
+  shipping_discount           shipping_discount[]
+  discount_coupons            discount_coupons[]
+  discount_vouchers           discount_vouchers[]
+  cart_items                  cart_items[]
+  bookings                    bookings[]
+}
+
+//--------Discount Model-------
+model discount {
+  id               String                   @id @default(uuid())
+  discountType     String // "FlatRate" or "Percentage"
+  discountAmount   Int? // Amount for FlatRate or Percentage value
+  category         store_SKU_category?      @relation(fields: [categoryID], references: [id])
+  subCategory      store_SKU_sub_category?  @relation(fields: [subCategoryID], references: [id])
+  brand            brand?                   @relation(fields: [brandID], references: [id])
+  itemVariant      store_SKU_item_variants? @relation(fields: [SKUItemVariantID], references: [id])
+  item             store_SKU_items?         @relation(fields: [SKUItemID], references: [id])
+  vendor_users     vendor_users?            @relation(fields: [vendorID], references: [id])
+  vendorID         String?
+  categoryID       String?
+  subCategoryID    String?
+  brandID          String?
+  SKUItemVariantID String?
+  SKUItemID        String?
+  startDate        DateTime                 @default(now())
+  endDate          DateTime?
+  createdAt        DateTime                 @default(now())
+  updatedAt        DateTime                 @updatedAt()
+  enabled          Boolean                  @default(true)
+}
+
+//--------Shippping Discount Model-------
+model shipping_discount {
+  id               String                   @id @default(uuid())
+  discountType     String // "FlatRate" or "Percentage"
+  discountAmount   Int? // Amount for FlatRate or Percentage value
+  category         store_SKU_category?      @relation(fields: [categoryID], references: [id])
+  subCategory      store_SKU_sub_category?  @relation(fields: [subCategoryID], references: [id])
+  brand            brand?                   @relation(fields: [brandID], references: [id])
+  itemVariant      store_SKU_item_variants? @relation(fields: [SKUItemVariantID], references: [id])
+  item             store_SKU_items?         @relation(fields: [SKUItemID], references: [id])
+  vendor_users     vendor_users?            @relation(fields: [vendorID], references: [id])
+  vendorID         String?
+  categoryID       String?
+  subCategoryID    String?
+  brandID          String?
+  SKUItemVariantID String?
+  SKUItemID        String?
+  startDate        DateTime                 @default(now())
+  endDate          DateTime?
+  createdAt        DateTime                 @default(now())
+  updatedAt        DateTime                 @updatedAt()
+  enabled          Boolean                  @default(true)
+}
+
+//--------Coupon and Voucher Discount Model-------
+model discount_coupons {
+  id               String                   @id @default(uuid())
+  discountType     String // "FlatRate" or "Percentage"
+  discountAmount   Int? // Amount for FlatRate or Percentage value
+  category         store_SKU_category?      @relation(fields: [categoryID], references: [id])
+  subCategory      store_SKU_sub_category?  @relation(fields: [subCategoryID], references: [id])
+  brand            brand?                   @relation(fields: [brandID], references: [id])
+  itemVariant      store_SKU_item_variants? @relation(fields: [SKUItemVariantID], references: [id])
+  item             store_SKU_items?         @relation(fields: [SKUItemID], references: [id])
+  vendor_users     vendor_users?            @relation(fields: [vendorID], references: [id])
+  vendorID         String?
+  categoryID       String?
+  subCategoryID    String?
+  brandID          String?
+  SKUItemVariantID String?
+  SKUItemID        String?
+  startDate        DateTime                 @default(now())
+  endDate          DateTime?
+  createdAt        DateTime                 @default(now())
+  updatedAt        DateTime                 @updatedAt()
+  enabled          Boolean                  @default(true)
+}
+
+//--------Coupon and Voucher Discount Model-------
+model discount_vouchers {
+  id               String                   @id @default(uuid())
+  discountType     String // "store" or "platform"
+  discountAmount   Int? // Amount for FlatRate or Percentage value
+  category         store_SKU_category?      @relation(fields: [categoryID], references: [id])
+  subCategory      store_SKU_sub_category?  @relation(fields: [subCategoryID], references: [id])
+  brand            brand?                   @relation(fields: [brandID], references: [id])
+  itemVariant      store_SKU_item_variants? @relation(fields: [SKUItemVariantID], references: [id])
+  item             store_SKU_items?         @relation(fields: [SKUItemID], references: [id])
+  vendor_users     vendor_users?            @relation(fields: [vendorID], references: [id])
+  vendorID         String?
+  categoryID       String?
+  subCategoryID    String?
+  brandID          String?
+  SKUItemVariantID String?
+  SKUItemID        String?
+  startDate        DateTime                 @default(now())
+  endDate          DateTime?
+  createdAt        DateTime                 @default(now())
+  updatedAt        DateTime                 @updatedAt()
+  enabled          Boolean                  @default(true)
+}
+
+//------------Store Inventory------------------
+model store_inventory {
+  id                     String       @id @default(uuid())
+  vendor_users           vendor_users @relation(fields: [vendorID], references: [id])
+  vendorID               String
+  storeInventoryQuantity String
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @updatedAt()
+
+  store_inventory_details store_inventory_details[]
+}
+
+model store_inventory_details {
+  id               String          @id @default(uuid())
+  store_inventory  store_inventory @relation(fields: [storeInventoryId], references: [id])
+  storeInventoryId String
+  date             DateTime
+  openingQuantity  Int
+  saleQuantity     Int
+  closingQuantity  Int
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+}
+
+//-----------------Customer Schema--------------------
+model users {
+  id           String     @id @default(uuid())
+  firstName    String
+  lastName     String?
+  email        String     @unique
+  phoneNumber  String     @unique
+  addressLine1 String?
+  addressLine2 String?
+  city         String?
+  state        String?
+  country      String?
+  zipCode      Int?
+  countryCode  String?
+  gender       String?
+  dateOfBirth  DateTime?  @unique
+  password     String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt()
+  enabled      Boolean    @default(true)
+  userType     String     @default("user")
+  user_cart    user_cart?
+  bookings     bookings[]
+}
+
+model user_cart {
+  id         String       @id @default(uuid())
+  users      users        @relation(fields: [userID], references: [id])
+  userID     String       @unique
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt()
+  cart_items cart_items[]
+}
+
+model cart_items {
+  id                      String                  @id @default(uuid())
+  store_SKU_item_variants store_SKU_item_variants @relation(fields: [SKUItemVariantID], references: [id])
+  SKUItemVariantID        String
+  user_cart               user_cart               @relation(fields: [cartID], references: [id])
+  cartID                  String
+  createdAt               DateTime                @default(now())
+  updatedAt               DateTime                @updatedAt()
+  qty                     Int
+  totalPrice              Int
+  rate                    Int
+}
+
+model bookings {
+  id                      String                  @id @default(uuid())
+  store_SKU_item_variants store_SKU_item_variants @relation(fields: [SKUItemVariantID], references: [id])
+  SKUItemVariantID        String
+  users                   users                   @relation(fields: [userID], references: [id])
+  userID                  String
+  createdAt               DateTime                @default(now())
+  updatedAt               DateTime                @updatedAt()
+  qty                     Int
+  totalPrice              Int
+  rate                    Int
+  shippingAddress         Json
+  billingAddress          Json
+  transactions            transactions[]
+}
+
+model transactions {
+  id        String     @id @default(uuid())
+  bookings  bookings   @relation(fields: [bookingID], references: [id])
+  bookingID String
+  subTotal  Int
+  VAT       Int
+  discount  Int
+  shipping  Int
+  total     Int
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt()
+  invoices  invoices[]
+}
+
+model invoices {
+  id            String       @id @default(uuid())
+  transactions  transactions @relation(fields: [tranSactionID], references: [id])
+  tranSactionID String
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt()
+}
