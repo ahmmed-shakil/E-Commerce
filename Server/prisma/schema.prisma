@@ -52,12 +52,13 @@ model admin_users {
 //------------Vendor roles -----------	
 
 model vendor_roles {
-  id             String         @id @default(uuid())
-  roleName       String         @unique
-  adminWithRoles vendor_users[]
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt()
-  enabled        Boolean        @default(true)
+  id                    String                  @id @default(uuid())
+  roleName              String                  @unique
+  adminWithRoles        vendor_users[]
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt()
+  enabled               Boolean                 @default(true)
+  vendor_employee_users vendor_employee_users[]
 }
 
 //-------Vendor User-------------
@@ -65,6 +66,7 @@ model vendor_users {
   id             String        @id @default(uuid())
   firstName      String
   lastName       String?
+  businessName   String
   email          String        @unique
   phoneNumber    String        @unique
   addressLine1   String?
@@ -85,11 +87,38 @@ model vendor_users {
   enabled        Boolean       @default(true)
   userType       String        @default("vendor")
 
-  discount          discount[]
-  shipping_discount shipping_discount[]
-  discount_coupons  discount_coupons[]
-  discount_vouchers discount_vouchers[]
-  store_inventory   store_inventory[]
+  discount              discount[]
+  shipping_discount     shipping_discount[]
+  discount_coupons      discount_coupons[]
+  discount_vouchers     discount_vouchers[]
+  store_inventory       store_inventory[]
+  vendor_employee_users vendor_employee_users[]
+}
+
+model vendor_employee_users {
+  id             String        @id @default(uuid())
+  firstName      String
+  lastName       String?
+  email          String        @unique
+  phoneNumber    String        @unique
+  addressLine1   String?
+  addressLine2   String?
+  city           String?
+  state          String?
+  country        String?
+  zipCode        Int?
+  countryCode    String?
+  gender         String?
+  dateOfBirth    DateTime?
+  password       String
+  vendor_roles   vendor_roles? @relation(fields: [vendor_rolesId], references: [id])
+  vendor_rolesId String
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt()
+  enabled        Boolean       @default(true)
+  userType       String        @default("vendor")
+  vendor_users   vendor_users  @relation(fields: [vendorID], references: [id])
+  vendorID       String
 }
 
 //-------Store SKU Catrgory----------

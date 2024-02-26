@@ -1,12 +1,7 @@
-export interface createAdminAccessPermissionsInterface {
-    accessPermissionName: string;
-}
-  
+
 export interface createAdminRolesInterface {
     roleName: string; //@unique
-    permissions: { id: string }[];
 }
-
 
 export interface adminRegisterInterface {
   firstName: string;

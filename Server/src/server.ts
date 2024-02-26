@@ -13,7 +13,7 @@ const app = express();
 app.use(express.json());
 
 // Admin routes
-app.use('/apis', rootRouter);
+app.use('/apis/v1', rootRouter);
 
 // Error Handling route
 app.use((req: Request, res: Response, next: NextFunction) => {

@@ -2,45 +2,15 @@ import prisma_client from "../../config/prisma";
 import { BadRequestError } from "../../core/ApiError";
 import { BadRequestResponse, FailureMsgResponse, InternalErrorResponse,SuccessResponse } from "../../core/ApiResponse";
 import { hashPassword } from "../../core/utils";
-import { adminRegisterInterface, createAdminAccessPermissionsInterface, createAdminRolesInterface } from "../models/admin.models";
+import { adminRegisterInterface, createAdminRolesInterface } from "../models/admin.models";
 
 
 
 // Roles and Permissions
-  const createPermissionMethod = async (
-    permissionData: createAdminAccessPermissionsInterface
-  ) => {
-    
-    const existingPermission = await prisma_client.admin_permissions.findFirst({
-        where: { accessPermissionName: permissionData.accessPermissionName },
-      });
-      if (existingPermission) {
-        throw new BadRequestError('Permission already exists');
-      }
-    const permissionResponse =
-        await prisma_client.admin_permissions.create({
-          data: { ...permissionData },
-        });
-      if (!permissionResponse) {
-        throw new BadRequestError('Failed to create new admin permission')
-      }
-      return new SuccessResponse("Created new admin permission", permissionResponse)
-  };
   const createRoleMethod = async (roleData: createAdminRolesInterface) => {
-    
-    const existingRole = await prisma_client.admin_roles.findFirst({
-        where: { roleName: roleData.roleName },
-      });
-      if (existingRole) {
-        throw new BadRequestError('Role already exists');
-      }
-    const permissions = roleData.permissions ? roleData.permissions : [];
     const roleResponse = await prisma_client.admin_roles.create({
       data: {
         roleName: roleData.roleName,
-        admin_permissions: {
-          connect: permissions,
-        },
       },
     });
     if (!roleResponse) {
@@ -50,19 +20,10 @@ import { adminRegisterInterface, createAdminAccessPermissionsInterface, createAd
   };
 
 
-  const fetchAllPermissionMethod = async () => {
-    const permissionFetched =
-        await prisma_client.admin_permissions.findMany({});
-      if (!permissionFetched) {
-        throw new BadRequestError("Failed to fetch admin permissions")
-      }
-
-      return new SuccessResponse("Fetched admin permissions", permissionFetched)
-  };
 
   const fetchAllRoleMethod = async () => {
     const roleFetched = await prisma_client.admin_roles.findMany({
-        include: { admin_permissions: true },
+      
       });
       if (!roleFetched) {
         throw new BadRequestError("Failed to fetch admin roles")
@@ -112,9 +73,7 @@ const RegisterAdminMethod = async (
 
 
   export {
-    createPermissionMethod,
     createRoleMethod,
-    fetchAllPermissionMethod,
     fetchAllRoleMethod,
     RegisterAdminMethod
   }

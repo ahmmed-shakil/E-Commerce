@@ -7,23 +7,6 @@ import JWT, { JwtPayload } from "../../core/JWT";
 import { cookieOptions } from "../../utils/cookieOptions";
 
 
-
-// Roles and Permissions
-const createPermissionController = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const permissionData = req.body;
-      
-        const createPermissionResponse = await AuthService.createPermissionService(
-         permissionData
-        );
-        
-        return createPermissionResponse?.send(res)
-        
-    } catch (error) {
-        console.log('🚀 ~ createPermissionController ~ error:', error);
-        next()
-    }
-  };
   const createRoleController = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const roleData = req.body;
@@ -36,19 +19,8 @@ const createPermissionController = async (req: Request, res: Response, next: Nex
     }
   };
 
-  const fetchAllPermissionController = async (req: Request, res: Response, next: NextFunction) => {
-   try {
-    const fetchAllPermissionResponse =
-    await AuthService.fetchAllPermissionService();
-    return fetchAllPermissionResponse.send(res)
-   } catch (error) {
-    console.log('🚀 ~ fetchAllPermissionController ~ error:', error);
-    next()
-   }
-  };
 
-
-  const fetchAllRoleController = async (req: Request, res: Response, next:NextFunction) => {
+const fetchAllRoleController = async (req: Request, res: Response, next:NextFunction) => {
     try {
         const fetchAllRoleResponse = await AuthService.fetchAllRoleService();
          return fetchAllRoleResponse.send(res) 
@@ -59,24 +31,24 @@ const createPermissionController = async (req: Request, res: Response, next: Nex
   };
 
 
-// Admin Users
-const adminRegisterController = async (
+// vendor Users
+const vendorRegisterController = async (
     req: Request,
     res: Response,
     next: NextFunction,
   ) => {
     try {
-      const adminRegisterData = req.body;
+      const vendorRegisterData = req.body;
       const userRegistrationResponse =
-      await AuthService.adminRegisterService(adminRegisterData);
+      await AuthService.vendorRegisterService(vendorRegisterData);
       return userRegistrationResponse.send(res);
     } catch (error) {
-      console.log('🚀 ~ adminRegisterController ~ error:', error);
+      console.log('🚀 ~ vendorRegisterController ~ error:', error);
       next(error);
     }
   };
 
-  const adminLoginController = async (
+  const vendorLoginController = async (
     req: Request,
     res: Response,
     next: NextFunction,
@@ -84,26 +56,25 @@ const adminRegisterController = async (
     try {
       const { username, password } = req.body;
   
-      const admin = await AuthService.adminLoginService(username, password);
+      const vendor = await AuthService.vendorLoginService(username, password);
   
-      if (!admin) {
+      if (!vendor) {
         new AuthFailureError(`user doesn't exist`);
         return;
       }
   
-      const isPasswordValid = await comparePassword(password, admin.password);
+      const isPasswordValid = await comparePassword(password, vendor.password);
   
       if (!isPasswordValid) {
         new AuthFailureError('Incorrect password')
         return;
       }
-      if (isPasswordValid && admin.id) {
-        const id = admin.id;
-        const roleName = admin.admin_rolesId;
-        const issuer = 'POG-API';
-        const audience = 'POG-SAAS';
+      if (isPasswordValid && vendor.id) {
+        const id = vendor.id;
+        const issuer = 'SMART-API';
+        const audience = 'SMART-SAAS';
         const subject = id.toString();
-        const param = admin.userName;
+        const param = vendor.userName;
         const validity = 3600;
         // Create JwtPayload instance
       const payload = new JwtPayload(issuer, audience, subject, param, validity);
@@ -122,10 +93,8 @@ const adminRegisterController = async (
 
 
 export {
-    createPermissionController,
     createRoleController,
-    fetchAllPermissionController,
     fetchAllRoleController,
-    adminRegisterController,
-    adminLoginController
+    vendorRegisterController,
+    vendorLoginController
 }
